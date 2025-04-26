@@ -194,7 +194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242969799}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.018189486, y: -0.0000000330474, z: 0.000000004532012, w: 0.99983466}
+  m_LocalRotation: {x: 0.018189486, y: -0.000000033076503, z: 0.0000000045383786, w: 0.99983466}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1051,7 +1051,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658494003}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.018141452, y: -0.00000003275636, z: 0.0000000032887328, w: 0.9998355}
+  m_LocalRotation: {x: -0.018141452, y: -0.000000032785465, z: 0.0000000032905518, w: 0.9998355}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1131,10 +1131,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ced0c861a6f3a84887c745b8f420386, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 12
-  Jumpforce: 0
-  GravityScale: 5
-  Controller: {fileID: 1790953066}
+  moveSpeed: 0
+  jumpforce: 0
+  gravityScale: 1
+  controller: {fileID: 0}
+  theCam: {fileID: 0}
 --- !u!1 &2119103601
 GameObject:
   m_ObjectHideFlags: 3
@@ -1206,7 +1207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119103601}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000037252903, y: -0.000000046624336, z: 0.0000000055388227, w: 1}
+  m_LocalRotation: {x: -0.0000000037252903, y: -0.000000046667992, z: 0.00000000554337, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

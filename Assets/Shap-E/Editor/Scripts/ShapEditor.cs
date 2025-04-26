@@ -24,7 +24,7 @@ namespace AiKodexShapE
         int steps = 64;
         int cfg = 15;
         private Vector2 mainScroll;
-        string invoice;
+        string generator_URL;
         private bool initDone = false;
         GUIStyle StatesLabel, headStyle, subStyle, sectionTitle, centeredLabelStyle, plusButton, style;
         private bool postFlag = false;
@@ -98,7 +98,7 @@ namespace AiKodexShapE
         void Awake()
         {
             directoryPath = "Assets/Shap-E/Models";
-            invoice = PlayerPrefs.GetString("ShapE_Invoice");
+            generator_URL = PlayerPrefs.GetString("ShapE_generator_URL");
             defaultPrefabObject = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/Shap-E/Editor/Resources/Cube.png", typeof(GameObject));
         }
         private void OnEnable()
@@ -198,7 +198,7 @@ namespace AiKodexShapE
             EditorGUILayout.BeginVertical();
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("              Shap-E", headStyle, GUILayout.MinHeight(23));
-            EditorGUILayout.LabelField("                      Version 1.0", subStyle);
+            EditorGUILayout.LabelField("                      Version 2.0", subStyle);
             EditorGUILayout.EndVertical();
             GUI.DrawTexture(new Rect(10, 3, 65, 65), logo, ScaleMode.StretchToFill, true, 10.0F);
             EditorGUILayout.EndHorizontal();
@@ -206,18 +206,11 @@ namespace AiKodexShapE
             GUILayout.BeginVertical();
             EditorGUILayout.LabelField("Mesh Generator", sectionTitle);
             EditorGUILayout.Space(15);
-            invoice = EditorGUILayout.TextField(new GUIContent("Invoice Number  ", infoToolTip, "Enter Invoice number. Invoice numbers start with \"IN\" and are 14 characters long. You can find them under Order History on the store. For a more detailed explaination, please refer to the documentation."), invoice);
+            generator_URL = EditorGUILayout.TextField(new GUIContent("URL  ", infoToolTip, "Enter Generator URL"), generator_URL);
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("");
-            if (GUILayout.Button("Verify", GUILayout.MaxWidth(45), GUILayout.MaxHeight(17)))
-            {
-                if (invoice.Length == 14)
-                    this.StartCoroutine(Verify($"https://{textToMeshID}-5000.proxy.runpod.net/verify", "{\"invoice\":\"" + invoice + "\"}"));
-                else
-                    Debug.Log("<color=orange>Invoice number missing or invalid: </color>Please verify your invoice number before proceeding. The invoice number is a 14-digit long string. Make sure there are no leading or trailing white spaces.");
-            }
             if (GUILayout.Button("Save", GUILayout.MaxWidth(40), GUILayout.MaxHeight(17)))
-                PlayerPrefs.SetString("ShapE_Invoice", invoice);
+                PlayerPrefs.SetString("ShapE_generator_URL", generator_URL);
 
             GUILayout.EndHorizontal();
             EditorGUILayout.Space(20);
@@ -282,22 +275,17 @@ namespace AiKodexShapE
             EditorGUI.BeginDisabledGroup(prompt == "" && fromImage == null || postFlag == true || modelName == "");
             if (GUILayout.Button("Generate 3D Model", GUILayout.Height(30)))
             {
-                if (invoice.Length != 14)
-                    Debug.Log("<color=orange>Invoice number missing or invalid: </color>Please verify your invoice number before proceeding. The invoice number is a 14-digit long string. Make sure there are no leading or trailing white spaces.");
-                else
-                {
                     OverwriteCheck();
                     postFlag = true;
                     postProgress = 0;
                     if (fromImage == null)
-                        this.StartCoroutine(Post($"https://{textToMeshID}-5000.proxy.runpod.net/data", "{\"prompt\":\"" + $"{prompt}" + "\",\"steps\":\"" + $"{steps}" + "\",\"cfg\":\"" + $"{cfg}" + "\",\"invoice\":\"" + $"{invoice}" + "\",\"fileFormat\":\"" + $"{format}" + "\"}"));
+                        this.StartCoroutine(Post($"{generator_URL}", "{\"prompt\":\"" + $"{prompt}" + "\",\"steps\":\"" + $"{steps}" + "\",\"cfg\":\"" + $"{cfg}" + "\",\"fileFormat\":\"" + $"{format}" + "\"}"));
                     else
                     {
                         byte[] encJPG = fromImage.DeCompress().EncodeToJPG();
                         base64encJPG = Convert.ToBase64String(encJPG);
-                        this.StartCoroutine(Post($"https://{imageToMeshID}-5000.proxy.runpod.net/data", "{\"prompt\":\"" + $"{base64encJPG}" + "\",\"steps\":\"" + $"{steps}" + "\",\"cfg\":\"" + $"{cfg}" + "\",\"invoice\":\"" + $"{invoice}" + "\",\"fileFormat\":\"" + $"{format}" + "\"}"));
+                        this.StartCoroutine(Post($"https://{imageToMeshID}-5000.proxy.runpod.net/data", "{\"prompt\":\"" + $"{base64encJPG}" + "\",\"steps\":\"" + $"{steps}" + "\",\"cfg\":\"" + $"{cfg}" + "\",\"fileFormat\":\"" + $"{format}" + "\"}"));
                     }
-                }
             }
             EditorGUI.EndDisabledGroup();
             Rect loading = GUILayoutUtility.GetRect(9, 9);
